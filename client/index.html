@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>client</title>
+  </head>
+  <body>
+    <script>
+      window.addEventListener('error', function(event) {
+        document.body.innerHTML += '<div style="background:red;color:white;padding:20px;position:fixed;top:0;left:0;z-index:9999;width:100%;">' + event.error.stack + '</div>';
+      });
+      window.addEventListener('unhandledrejection', function(event) {
+        document.body.innerHTML += '<div style="background:orange;color:white;padding:20px;position:fixed;top:0;left:0;z-index:9999;width:100%;">Unhandled Promise: ' + event.reason + '</div>';
+      });
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
