@@ -219,7 +219,7 @@ const Home = () => {
                         <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:rotate-12 transition-transform">
                             <Layers size={24} />
                         </div>
-                        <span className="text-xl font-black text-slate-900 tracking-tighter">Workspace</span>
+                        <span className="text-xl font-black text-slate-900 tracking-tighter">Collabrix</span>
                     </div>
                     <nav className="hidden md:flex items-center gap-8">
                         {['Features', 'How it Works', 'Templates', 'Pricing'].map(item => (
@@ -1243,7 +1243,7 @@ const Home = () => {
                                     <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white">
                                         <Layers size={22} />
                                     </div>
-                                    <span className="text-xl font-bold text-white">Workspace</span>
+                                    <span className="text-xl font-bold text-white">Collabrix</span>
                                 </div>
                                 <p className="text-slate-400 text-sm leading-relaxed max-w-xs font-medium">
                                     The persistent digital workspace for modern teams. Collaborate, innovate, and execute.
@@ -1293,7 +1293,7 @@ const Home = () => {
                     </div>
 
                     <div className="pt-12 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6">
-                        <p className="text-slate-500 text-sm font-medium">© 2026 Workspace Inc. All rights reserved.</p>
+                        <p className="text-slate-500 text-sm font-medium">© 2026 Collabrix Inc. All rights reserved.</p>
                         <div className="flex gap-8 text-slate-500 text-sm font-medium">
                             <span className="hover:text-slate-300 cursor-pointer transition-colors">Privacy Policy</span>
                             <span className="hover:text-slate-300 cursor-pointer transition-colors">Terms of Service</span>
