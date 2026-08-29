@@ -20,7 +20,7 @@ import RoomHeader from '../components/RoomHeader';
 import BackgroundSelector from '../components/BackgroundSelector';
 import VideoPlayer from '../components/VideoPlayer';
 
-const SOCKET_URL = 'http://localhost:5001';
+const SOCKET_URL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5001';
 
 // Custom Konva Image Component to load URLs
 const URLImage = ({ imageProps, isSelected, onSelect, onTransformEnd, remoteGlowProps }) => {
@@ -317,7 +317,7 @@ const Room = () => {
 
         const doc = new Y.Doc();
         const wsProvider = new WebsocketProvider(
-            `ws://${window.location.hostname}:5001/yjs`,
+            `${SOCKET_URL.startsWith('https') ? 'wss' : 'ws'}://${SOCKET_URL.replace(/^https?:\/\//, '')}/yjs`,
             roomId,
             doc
         );

@@ -12,7 +12,7 @@ import useAuthStore from '../store/authStore';
 import api from '../services/api';
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:5001';
+const SOCKET_URL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5001';
 
 // Mandatory Safety Guardrail: ErrorBoundary to prevent white screens
 class DashboardErrorBoundary extends Component {
