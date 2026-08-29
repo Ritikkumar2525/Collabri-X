@@ -66,7 +66,7 @@ const Cursors = ({ provider, roomId }) => {
                     <div
                         key={id}
                         className="absolute top-0 left-0 transition-all duration-75 ease-out flex flex-col items-start"
-                        style={{ transform: `translate(${cursor.x}px, ${cursor.y}px)` }}
+                        style={{ transform: `trangray(${cursor.x}px, ${cursor.y}px)` }}
                     >
                         {/* SVG standard cursor arrow */}
                         <svg width="24" height="36" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md z-50">

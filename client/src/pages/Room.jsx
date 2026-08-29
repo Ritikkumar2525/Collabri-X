@@ -111,7 +111,7 @@ const URLPdf = ({ pdfProps, isSelected, onSelect, onTransformEnd, remoteGlowProp
 };
 
 const CURSOR_COLORS = [
-    '#6366f1', '#ec4899', '#f59e0b', '#10b981',
+    '#dc2626', '#ec4899', '#f59e0b', '#10b981',
     '#3b82f6', '#8b5cf6', '#ef4444', '#06b6d4',
     '#f97316', '#14b8a6', '#f43f5e', '#84cc16'
 ];
@@ -126,24 +126,24 @@ const getCursorColor = (id) => {
 
 const OnboardingTooltip = ({ text, position = 'top' }) => {
     const posClasses = {
-        top: 'bottom-full left-1/2 -translate-x-1/2 mb-4',
-        bottom: 'top-full left-1/2 -translate-x-1/2 mt-4',
-        left: 'right-full top-1/2 -translate-y-1/2 mr-4',
-        right: 'left-full top-1/2 -translate-y-1/2 ml-4',
+        top: 'bottom-full left-1/2 -trangray-x-1/2 mb-4',
+        bottom: 'top-full left-1/2 -trangray-x-1/2 mt-4',
+        left: 'right-full top-1/2 -trangray-y-1/2 mr-4',
+        right: 'left-full top-1/2 -trangray-y-1/2 ml-4',
     };
 
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`absolute z-[250] ${posClasses[position]} px-4 py-2 bg-indigo-600 shadow-2xl rounded-xl border border-indigo-400 pointer-events-none whitespace-nowrap flex items-center gap-2`}
+            className={`absolute z-[250] ${posClasses[position]} px-4 py-2 bg-red-accent shadow-2xl rounded-xl border border-red-400 pointer-events-none whitespace-nowrap flex items-center gap-2`}
         >
-            <Sparkles size={12} className="text-indigo-200 animate-pulse" />
-            <span className="text-[11px] font-black text-white uppercase tracking-wider">{text}</span>
-            <div className={`absolute w-3 h-3 bg-indigo-600 rotate-45 ${position === 'top' ? 'bottom-[-6px] left-1/2 -translate-x-1/2' :
-                position === 'bottom' ? 'top-[-6px] left-1/2 -translate-x-1/2' :
-                    position === 'left' ? 'right-[-6px] top-1/2 -translate-y-1/2' :
-                        'left-[-6px] top-1/2 -translate-y-1/2'
+            <Sparkles size={12} className="text-red-200 animate-pulse" />
+            <span className="text-[11px] font-bold text-white uppercase tracking-wider">{text}</span>
+            <div className={`absolute w-3 h-3 bg-red-accent rotate-45 ${position === 'top' ? 'bottom-[-6px] left-1/2 -trangray-x-1/2' :
+                position === 'bottom' ? 'top-[-6px] left-1/2 -trangray-x-1/2' :
+                    position === 'left' ? 'right-[-6px] top-1/2 -trangray-y-1/2' :
+                        'left-[-6px] top-1/2 -trangray-y-1/2'
                 }`} />
         </motion.div>
     );
@@ -529,7 +529,7 @@ const Room = () => {
                 y: pointer.y - mousePointTo.y * newScale,
             });
         } else {
-            // Standard scroll / trackpad two-finger swipe translates to Panning
+            // Standard scroll / trackpad two-finger swipe trangrays to Panning
             setStagePos({
                 x: stagePos.x - e.evt.deltaX,
                 y: stagePos.y - e.evt.deltaY,
@@ -707,7 +707,7 @@ const Room = () => {
                     scaleY={el.scaleY || 1}
                     rotation={el.rotation || 0}
                     points={el.points}
-                    stroke={el.type === 'eraser' ? '#f9fafb' : el.color}
+                    stroke={el.type === 'eraser' ? '#05050a' : el.color}
                     strokeWidth={el.strokeWidth}
                     tension={0.5}
                     lineCap="round"
@@ -911,7 +911,7 @@ const Room = () => {
                         shadowOpacity={isDragging ? 0.6 : 0.4}
                         shadowOffset={isDragging ? { x: 12, y: 12 } : (isSelected ? { x: 10, y: 10 } : { x: 5, y: 5 })}
                         cornerRadius={4}
-                        stroke={isSelected ? '#6366f1' : 'transparent'}
+                        stroke={isSelected ? '#dc2626' : 'transparent'}
                         strokeWidth={2}
                     />
                     {!isEditing && (
@@ -1262,11 +1262,11 @@ const Room = () => {
 
     const getBackgroundStyle = () => {
         try {
-            if (!canvasBackground) return { backgroundColor: '#f8fafc', position: 'absolute', inset: 0 };
+            if (!canvasBackground) return { backgroundColor: '#05050a', position: 'absolute', inset: 0 };
 
             const { type, value, opacity, color } = canvasBackground;
             const safeOpacity = typeof opacity === 'number' ? opacity : 1;
-            const safeColor = color || '#f8fafc';
+            const safeColor = color || '#05050a';
 
             const style = {
                 backgroundColor: safeColor,
@@ -1321,7 +1321,7 @@ const Room = () => {
             return style;
         } catch (error) {
             console.error("getBackgroundStyle failed:", error);
-            return { backgroundColor: '#f8fafc', position: 'absolute', inset: 0 };
+            return { backgroundColor: '#05050a', position: 'absolute', inset: 0 };
         }
     };
 
@@ -1332,7 +1332,7 @@ const Room = () => {
     };
 
     return (
-        <div className="h-screen w-screen overflow-hidden bg-white select-none relative font-sans text-slate-900 pt-16" onDragOver={handleDragOver} onDrop={handleDrop}>
+        <div className="h-screen w-screen overflow-hidden bg-dark-lighter select-none relative font-sans text-white pt-16" onDragOver={handleDragOver} onDrop={handleDrop}>
             <RoomHeader
                 roomId={roomId}
                 userCount={userCount}
@@ -1379,18 +1379,18 @@ const Room = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="absolute inset-0 z-[100] flex items-center justify-center bg-slate-900/10 backdrop-blur-sm"
+                                className="absolute inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-sm"
                             >
                                 <motion.div
                                     initial={{ scale: 0.9, y: 20 }}
                                     animate={{ scale: 1, y: 0 }}
-                                    className="text-center p-8 bg-white rounded-3xl shadow-2xl border border-red-100 max-w-sm mx-4"
+                                    className="text-center p-8 bg-dark-lighter rounded-3xl shadow-2xl border border-red-100 max-w-sm mx-4"
                                 >
-                                    <h3 className="text-xl font-bold text-slate-800 mb-2">Workspace Error</h3>
-                                    <p className="text-sm text-slate-500 mb-6 font-medium leading-relaxed">{error}</p>
+                                    <h3 className="text-xl font-medium text-gray-200 mb-2">Workspace Error</h3>
+                                    <p className="text-sm text-gray-500 mb-6 font-medium leading-relaxed">{error}</p>
                                     <button
                                         onClick={() => navigate('/dashboard')}
-                                        className="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95"
+                                        className="w-full bg-red-accent text-white py-3 rounded-xl font-medium hover:bg-red-800 transition-all shadow-lg shadow-red-600/20 active:scale-95"
                                     >
                                         Back to Dashboard
                                     </button>
@@ -1402,11 +1402,11 @@ const Room = () => {
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="absolute inset-0 z-[90] flex items-center justify-center bg-white/80 backdrop-blur-md"
+                                className="absolute inset-0 z-[90] flex items-center justify-center bg-dark-lighter/80 backdrop-blur-md"
                             >
                                 <div className="text-center">
-                                    <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                                    <p className="text-sm font-bold text-slate-600 animate-pulse">Initializing Secure Workspace...</p>
+                                    <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                                    <p className="text-sm font-medium text-gray-400 animate-pulse">Initializing Secure Workspace...</p>
                                 </div>
                             </motion.div>
                         )}
@@ -1465,7 +1465,7 @@ const Room = () => {
                                 padding: `${10 * stageScale}px`,
                                 fontSize: `${16 * stageScale}px`,
                                 fontFamily: elements.find(el => el.id === editingText.id)?.stickyFont || 'sans-serif',
-                                color: '#1f2937',
+                                color: '#f3f4f6',
                                 resize: 'none',
                                 zIndex: 1000,
                                 transform: `rotate(${elements.find(el => el.id === editingText.id)?.rotation || 0}deg)`,
@@ -1500,19 +1500,19 @@ const Room = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             style={{ resize: 'both', overflow: 'hidden' }}
-                            className="absolute top-24 right-8 z-40 bg-white/90 backdrop-blur-xl rounded-[32px] shadow-[0_30px_60px_rgba(0,0,0,0.12)] border border-white/40 min-w-[320px] max-w-[90vw] min-h-[200px] p-2 ring-1 ring-black/5"
+                            className="absolute top-24 right-8 z-40 bg-dark-lighter/90 backdrop-blur-xl rounded-[32px] shadow-[0_30px_60px_rgba(0,0,0,0.12)] border border-white/40 min-w-[320px] max-w-[90vw] min-h-[200px] p-2 ring-1 ring-black/5"
                         >
-                            <div className="flex items-center justify-between px-6 py-3 border-b border-slate-100/50 cursor-grab active:cursor-grabbing">
+                            <div className="flex items-center justify-between px-6 py-3 border-b border-white/5 cursor-grab active:cursor-grabbing">
                                 <div className="flex items-center gap-2">
-                                    <Move size={14} className="text-slate-400" />
+                                    <Move size={14} className="text-gray-500" />
                                     <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                                    <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest pointer-events-none">Live Conference</span>
+                                    <span className="text-[10px] font-bold text-gray-200 uppercase tracking-widest pointer-events-none">Live Conference</span>
                                 </div>
                                 <div className="flex gap-2">
-                                    <button onClick={toggleCamera} className={`p-2 rounded-xl transition-all ${isCameraOn ? 'bg-slate-100 text-slate-600' : 'bg-red-100 text-red-600'}`}>
+                                    <button onClick={toggleCamera} className={`p-2 rounded-xl transition-all ${isCameraOn ? 'bg-gray-100 text-gray-400' : 'bg-red-100 text-red-600'}`}>
                                         {isCameraOn ? <Camera size={16} /> : <CameraOff size={16} />}
                                     </button>
-                                    <button onClick={toggleMic} className={`p-2 rounded-xl transition-all ${isMicOn ? 'bg-slate-100 text-slate-600' : 'bg-red-100 text-red-600'}`}>
+                                    <button onClick={toggleMic} className={`p-2 rounded-xl transition-all ${isMicOn ? 'bg-gray-100 text-gray-400' : 'bg-red-100 text-red-600'}`}>
                                         {isMicOn ? <Mic size={16} /> : <MicOff size={16} />}
                                     </button>
                                     <button onClick={handleStopCall} className="p-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all ml-1">
@@ -1525,28 +1525,28 @@ const Room = () => {
                                     'grid-cols-2 lg:grid-cols-3'
                                 }`}>
                                 {localStream && (
-                                    <div className="relative aspect-video bg-slate-900 rounded-2.5xl overflow-hidden ring-1 ring-white/20 shadow-2xl group">
+                                    <div className="relative aspect-video bg-black rounded-2.5xl overflow-hidden ring-1 ring-white/20 shadow-2xl group">
                                         {isCameraOn ? (
                                             <VideoPlayer stream={localStream} isLocal={true} muted={true} />
                                         ) : (
-                                            <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-                                                <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
+                                            <div className="w-full h-full bg-dark-lightest flex items-center justify-center">
+                                                <div className="w-12 h-12 rounded-full bg-dark-lighter flex items-center justify-center text-gray-500">
                                                     <CameraOff size={24} />
                                                 </div>
                                             </div>
                                         )}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <div className="absolute bottom-3 left-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] text-white font-black border border-white/10 flex items-center gap-2">
+                                        <div className="absolute bottom-3 left-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] text-white font-bold border border-white/10 flex items-center gap-2">
                                             <span className="w-1.5 h-1.5 bg-green-400 rounded-full" />
                                             You (Host)
                                         </div>
                                     </div>
                                 )}
                                 {Object.entries(remoteStreams).map(([uId, stream]) => (
-                                    <div key={uId} className="relative aspect-video bg-slate-900 rounded-2.5xl overflow-hidden ring-1 ring-white/20 shadow-2xl group text-left">
+                                    <div key={uId} className="relative aspect-video bg-black rounded-2.5xl overflow-hidden ring-1 ring-white/20 shadow-2xl group text-left">
                                         <VideoPlayer stream={stream} isLocal={false} />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                                        <div className="absolute bottom-3 left-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] text-white font-black border border-white/10">
+                                        <div className="absolute bottom-3 left-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] text-white font-bold border border-white/10">
                                             {remoteSelections[uId]?.user?.name || 'Collaborator'}
                                         </div>
                                     </div>
@@ -1556,12 +1556,12 @@ const Room = () => {
                     )}
 
                     {/* Viewport Zoom Indicator */}
-                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md px-4 py-2 rounded-2xl border border-slate-200 shadow-xl flex items-center gap-6 z-10">
-                        <button className="text-slate-400 hover:text-indigo-600 font-bold" onClick={() => setStageScale(s => Math.max(0.1, s - 0.1))}>-</button>
-                        <span className="text-[10px] font-bold text-slate-600 min-w-[40px] text-center">{Math.round(stageScale * 100)}%</span>
-                        <button className="text-slate-400 hover:text-indigo-600 font-bold" onClick={() => setStageScale(s => Math.min(10, s + 0.1))}>+</button>
-                        <div className="w-px h-4 bg-slate-200" />
-                        <button className="text-xs font-bold text-slate-500 hover:text-indigo-600" onClick={() => { setStagePos({ x: 0, y: 0 }); setStageScale(1); }}>Reset View</button>
+                    <div className="absolute bottom-6 left-1/2 -trangray-x-1/2 bg-dark-lighter/80 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 shadow-xl flex items-center gap-6 z-10">
+                        <button className="text-gray-500 hover:text-red-accent font-medium" onClick={() => setStageScale(s => Math.max(0.1, s - 0.1))}>-</button>
+                        <span className="text-[10px] font-medium text-gray-400 min-w-[40px] text-center">{Math.round(stageScale * 100)}%</span>
+                        <button className="text-gray-500 hover:text-red-accent font-medium" onClick={() => setStageScale(s => Math.min(10, s + 0.1))}>+</button>
+                        <div className="w-px h-4 bg-gray-200" />
+                        <button className="text-xs font-medium text-gray-500 hover:text-red-accent" onClick={() => { setStagePos({ x: 0, y: 0 }); setStageScale(1); }}>Reset View</button>
                     </div>
                 </div>
 
@@ -1591,21 +1591,21 @@ const Room = () => {
                 </div>
 
                 {/* Phase 7: Room ID Display (Bottom Left) */}
-                <div className="fixed bottom-6 left-28 z-40 bg-white/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-200 shadow-xl flex items-center gap-3 transition-all hover:bg-white group">
+                <div className="fixed bottom-6 left-28 z-40 bg-dark-lighter/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 shadow-xl flex items-center gap-3 transition-all hover:bg-dark-lighter group">
                     <div className="flex flex-col">
-                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Room ID</span>
-                        <span className="text-xs font-mono font-bold text-slate-700">{roomId}</span>
+                        <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-1">Room ID</span>
+                        <span className="text-xs font-mono font-medium text-gray-300">{roomId}</span>
                     </div>
-                    <div className="w-px h-6 bg-slate-200" />
+                    <div className="w-px h-6 bg-gray-200" />
                     <button
                         onClick={() => {
                             navigator.clipboard.writeText(roomId);
                             // Simple feedback
                             const btn = document.activeElement;
-                            if (btn) btn.innerHTML = '<span class="text-emerald-500">Copied!</span>';
+                            if (btn) btn.innerHTML = '<span class="text-red-500">Copied!</span>';
                             setTimeout(() => { if (btn) btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>'; }, 2000);
                         }}
-                        className="p-2 hover:bg-slate-50 rounded-lg text-slate-400 hover:text-indigo-600 transition-all active:scale-90"
+                        className="p-2 hover:bg-dark rounded-lg text-gray-500 hover:text-red-accent transition-all active:scale-90"
                         title="Copy Room ID"
                     >
                         <Copy size={14} />
@@ -1614,7 +1614,7 @@ const Room = () => {
 
                 {/* Phase 8: Resize Handle (Bottom Right Corner) */}
                 <div className="fixed bottom-0 right-0 z-[100] w-6 h-6 cursor-nwse-resize group flex items-center justify-center pointer-events-auto">
-                    <div className="w-4 h-4 border-r-2 border-b-2 border-slate-300 group-hover:border-indigo-500 transition-colors rounded-br-sm" />
+                    <div className="w-4 h-4 border-r-2 border-b-2 border-white/20 group-hover:border-red-500 transition-colors rounded-br-sm" />
                 </div>
 
                 <Cursors provider={provider} roomId={roomId} />
@@ -1627,24 +1627,24 @@ const Room = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-md"
+                        className="absolute inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-md"
                     >
                         <motion.div
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
-                            className="bg-white rounded-[32px] shadow-2xl p-10 max-w-md mx-4 relative overflow-hidden text-center"
+                            className="bg-dark-lighter rounded-[32px] shadow-2xl p-10 max-w-md mx-4 relative overflow-hidden text-center"
                         >
-                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
-                            <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-3xl flex items-center justify-center mb-6 shadow-sm mx-auto">
+                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-red-700 to-black" />
+                            <div className="w-20 h-20 bg-red-accent/10 text-red-accent rounded-3xl flex items-center justify-center mb-6 shadow-sm mx-auto">
                                 <Sparkles size={40} className="animate-pulse" />
                             </div>
-                            <h2 className="text-3xl font-black text-slate-800 mb-4 tracking-tight">Welcome to your workspace!</h2>
-                            <p className="text-slate-500 font-medium leading-relaxed mb-8">
+                            <h2 className="text-3xl font-bold text-gray-200 mb-4 tracking-tight">Welcome to your workspace!</h2>
+                            <p className="text-gray-500 font-medium leading-relaxed mb-8">
                                 You've just created a persistent, collaborative space. Use the toolbar to draw, add shapes, or write text.
                             </p>
                             <button
                                 onClick={() => setOnboardingStep(1)}
-                                className="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 active:scale-95"
+                                className="w-full bg-red-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-red-800 transition-all shadow-xl shadow-red-200 active:scale-95"
                             >
                                 Let's go!
                             </button>
@@ -1682,16 +1682,16 @@ class RoomErrorBoundary extends React.Component {
     render() {
         if (this.state.hasError) {
             return (
-                <div className="h-screen w-screen flex flex-col items-center justify-center bg-slate-900 text-white p-8 text-center space-y-6">
+                <div className="h-screen w-screen flex flex-col items-center justify-center bg-black text-white p-8 text-center space-y-6">
                     <div className="w-16 h-16 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center">
                         <MonitorPlay size={32} />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-black mb-2">Workspace Error</h2>
-                        <p className="text-slate-400 text-sm max-w-sm mb-6">{this.state.error?.message || "An unexpected error occurred in the room."}</p>
+                        <h2 className="text-2xl font-bold mb-2">Workspace Error</h2>
+                        <p className="text-gray-500 text-sm max-w-sm mb-6">{this.state.error?.message || "An unexpected error occurred in the room."}</p>
                         <button
                             onClick={() => window.location.href = '/dashboard'}
-                            className="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl font-bold transition-all shadow-lg"
+                            className="bg-red-accent hover:bg-red-600 px-6 py-3 rounded-xl font-medium transition-all shadow-lg"
                         >
                             Back to Dashboard
                         </button>

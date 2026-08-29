@@ -191,7 +191,7 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
                 ref={toolbarRef}
                 initial={false}
                 animate={{ width: isCollapsed ? 64 : 116 }}
-                className="absolute left-4 top-20 bottom-4 z-[90] flex flex-col bg-white/95 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl p-3 gap-3 pointer-events-auto"
+                className="absolute left-4 top-20 bottom-4 z-[90] flex flex-col bg-dark-lighter/95 backdrop-blur-xl border border-white/10 shadow-2xl rounded-3xl p-3 gap-3 pointer-events-auto"
             >
                 {/* Active Users Avatars */}
                 {activeUsers.length > 0 && (
@@ -199,42 +199,42 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
                         {activeUsers.slice(0, 3).map((u) => (
                             <div key={u.userId} className="relative group/user cursor-pointer transition-transform hover:scale-110">
                                 <div
-                                    className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold text-white border-2 border-white shadow-sm ring-1 ring-black/5"
-                                    style={{ backgroundColor: u.color || '#6366f1' }}
+                                    className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-medium text-white border-2 border-white shadow-sm ring-1 ring-black/5"
+                                    style={{ backgroundColor: u.color || '#dc2626' }}
                                 >
                                     {u.name?.charAt(0)?.toUpperCase()}
                                 </div>
                                 <div className="absolute top-0 right-[-2px] w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
-                                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-4 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-xl opacity-0 group-hover/user:opacity-100 pointer-events-none transition-all scale-90 group-hover/user:scale-100 whitespace-nowrap z-[200] shadow-xl">
+                                <div className="absolute left-full top-1/2 -trangray-y-1/2 ml-4 px-2.5 py-1.5 bg-black text-white text-[10px] font-medium rounded-xl opacity-0 group-hover/user:opacity-100 pointer-events-none transition-all scale-90 group-hover/user:scale-100 whitespace-nowrap z-[200] shadow-xl">
                                     {u.name || 'Anonymous'}
                                 </div>
                             </div>
                         ))}
                         {activeUsers.length > 3 && (
                             <div className="relative group/extra cursor-pointer transition-transform hover:scale-110">
-                                <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-600 border-2 border-white shadow-sm ring-1 ring-black/5">
+                                <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-medium text-gray-400 border-2 border-white shadow-sm ring-1 ring-black/5">
                                     +{activeUsers.length - 3}
                                 </div>
-                                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-4 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-xl opacity-0 group-hover/extra:opacity-100 pointer-events-none transition-all scale-90 group-hover/extra:scale-100 whitespace-nowrap z-[200] shadow-xl">
+                                <div className="absolute left-full top-1/2 -trangray-y-1/2 ml-4 px-2.5 py-1.5 bg-black text-white text-[10px] font-medium rounded-xl opacity-0 group-hover/extra:opacity-100 pointer-events-none transition-all scale-90 group-hover/extra:scale-100 whitespace-nowrap z-[200] shadow-xl">
                                     {activeUsers.slice(3).map(u => u.name).join(', ')}
                                 </div>
                             </div>
                         )}
                     </div>
                 )}
-                {activeUsers.length > 0 && <div className="w-full h-px bg-slate-100" />}
+                {activeUsers.length > 0 && <div className="w-full h-px bg-gray-100" />}
                 {/* Collapse Toggle */}
                 <div className="flex items-center justify-between px-2">
-                    {!isCollapsed && <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tools</span>}
+                    {!isCollapsed && <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Tools</span>}
                     <button
                         onClick={() => setIsCollapsed(!isCollapsed)}
-                        className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-100 rounded-xl transition-all ml-auto"
+                        className="p-2 text-gray-500 hover:text-red-accent hover:bg-gray-100 rounded-xl transition-all ml-auto"
                     >
                         {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                     </button>
                 </div>
 
-                <div className="w-full h-px bg-slate-100" />
+                <div className="w-full h-px bg-gray-100" />
 
                 {/* Primary Tools */}
                 <div className={`grid gap-1 w-full overflow-y-auto custom-scrollbar flex-1 pr-1 ${isCollapsed ? 'grid-cols-1' : 'grid-cols-2 content-start'}`}>
@@ -254,48 +254,48 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
                                 }
                             }}
                             className={`p-3 rounded-2xl transition-all relative flex items-center justify-center group gap-3 shrink-0 ${tool === t.id
-                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
-                                : 'text-slate-500 hover:bg-slate-100/80 hover:text-slate-900'
+                                ? 'bg-red-accent text-white shadow-lg shadow-red-200'
+                                : 'text-gray-500 hover:bg-gray-100/80 hover:text-white'
                                 }`}
                         >
                             <t.icon size={20} strokeWidth={tool === t.id ? 2.5 : 2} className="shrink-0" />
 
                             {/* Hover Tooltip (Always shown on hover since there are no labels) */}
-                            <div className="absolute left-full ml-4 px-3 py-2 bg-slate-900 text-white text-[10px] font-bold rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">
+                            <div className="absolute left-full ml-4 px-3 py-2 bg-black text-white text-[10px] font-medium rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">
                                 {t.label}
                             </div>
                         </button>
                     ))}
                 </div>
 
-                <div className="w-full h-px bg-slate-100" />
+                <div className="w-full h-px bg-gray-100" />
 
                 {/* Secondary Actions */}
                 <div className="flex flex-col gap-1 w-full">
-                    <div className={`grid gap-1 mb-1 border-b border-slate-100 pb-2 ${isCollapsed ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                    <div className={`grid gap-1 mb-1 border-b border-white/5 pb-2 ${isCollapsed ? 'grid-cols-1' : 'grid-cols-2'}`}>
                         <button
                             onClick={undo}
-                            className="p-3 text-slate-500 hover:bg-slate-100 rounded-2xl transition-all flex items-center justify-center group relative"
+                            className="p-3 text-gray-500 hover:bg-gray-100 rounded-2xl transition-all flex items-center justify-center group relative"
                         >
                             <Undo size={18} />
-                            <div className="absolute left-full ml-4 px-3 py-2 bg-slate-900 text-white text-[10px] font-bold rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">Undo (Ctrl+Z)</div>
+                            <div className="absolute left-full ml-4 px-3 py-2 bg-black text-white text-[10px] font-medium rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">Undo (Ctrl+Z)</div>
                         </button>
                         <button
                             onClick={redo}
-                            className="p-3 text-slate-500 hover:bg-slate-100 rounded-2xl transition-all flex items-center justify-center group relative"
+                            className="p-3 text-gray-500 hover:bg-gray-100 rounded-2xl transition-all flex items-center justify-center group relative"
                         >
                             <Redo size={18} />
-                            <div className="absolute left-full ml-4 px-3 py-2 bg-slate-900 text-white text-[10px] font-bold rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">Redo (Ctrl+Y)</div>
+                            <div className="absolute left-full ml-4 px-3 py-2 bg-black text-white text-[10px] font-medium rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">Redo (Ctrl+Y)</div>
                         </button>
                     </div>
 
                     <div className={`grid gap-1 ${isCollapsed ? 'grid-cols-1' : 'grid-cols-2'}`}>
                         <button
                             onClick={() => setIsTemplatesOpen(true)}
-                            className="p-3 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-2xl transition-all flex items-center justify-center relative group"
+                            className="p-3 text-red-accent bg-red-accent/10 hover:bg-red-accent/20 rounded-2xl transition-all flex items-center justify-center relative group"
                         >
                             <LayoutTemplate size={20} className="shrink-0" />
-                            <div className="absolute left-full ml-4 px-3 py-2 bg-slate-900 text-white text-[10px] font-bold rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">
+                            <div className="absolute left-full ml-4 px-3 py-2 bg-black text-white text-[10px] font-medium rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">
                                 Templates
                             </div>
                         </button>
@@ -303,10 +303,10 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
                         <button
                             onClick={() => fileInputRef.current?.click()}
                             disabled={isUploading}
-                            className="p-3 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-2xl transition-all disabled:opacity-50 flex items-center justify-center relative group"
+                            className="p-3 text-red-accent bg-red-accent/10 hover:bg-red-accent/20 rounded-2xl transition-all disabled:opacity-50 flex items-center justify-center relative group"
                         >
                             <ImagePlus size={20} className={`shrink-0 ${isUploading ? "animate-pulse" : ""}`} />
-                            <div className="absolute left-full ml-4 px-3 py-2 bg-slate-900 text-white text-[10px] font-bold rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">
+                            <div className="absolute left-full ml-4 px-3 py-2 bg-black text-white text-[10px] font-medium rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all scale-90 group-hover:scale-100 whitespace-nowrap z-[200] shadow-xl">
                                 {isUploading ? 'Uploading...' : 'Images/PDF'}
                             </div>
                             <input
@@ -320,12 +320,12 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
                     </div>
 
                     {selectedId && (
-                        <div className="flex flex-col gap-1 mt-2 pt-2 border-t border-slate-100">
+                        <div className="flex flex-col gap-1 mt-2 pt-2 border-t border-white/5">
                             <div className="grid grid-cols-3 gap-1">
-                                <button onClick={handleBringForward} className="p-2 text-slate-500 hover:bg-slate-100 rounded-xl transition-all flex items-center justify-center" title="Bring Forward">
+                                <button onClick={handleBringForward} className="p-2 text-gray-500 hover:bg-gray-100 rounded-xl transition-all flex items-center justify-center" title="Bring Forward">
                                     <BringToFront size={18} />
                                 </button>
-                                <button onClick={handleSendToBack} className="p-2 text-slate-500 hover:bg-slate-100 rounded-xl transition-all flex items-center justify-center" title="Send to Back">
+                                <button onClick={handleSendToBack} className="p-2 text-gray-500 hover:bg-gray-100 rounded-xl transition-all flex items-center justify-center" title="Send to Back">
                                     <SendToBack size={18} />
                                 </button>
                                 <button onClick={() => deleteElement(selectedId)} className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-all flex items-center justify-center" title="Delete">
@@ -343,11 +343,11 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -10 }}
-                            className="absolute left-[calc(100%+12px)] top-0 bg-white/95 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl p-4 w-56 flex flex-col gap-4 z-[200]"
+                            className="absolute left-[calc(100%+12px)] top-0 bg-dark-lighter/95 backdrop-blur-xl border border-white/10 shadow-2xl rounded-3xl p-4 w-56 flex flex-col gap-4 z-[200]"
                         >
                             {/* Color Picker */}
                             <div>
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Color</label>
+                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3 block">Color</label>
                                 <div className="grid grid-cols-4 gap-2">
                                     {colors.map((c) => (
                                         <button
@@ -356,7 +356,7 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
                                                 handleColorChange(c);
                                                 if (!selectedId) setIsColorPanelOpen(false); // Auto-close on color pick if not editing an existing item
                                             }}
-                                            className={`w-9 h-9 rounded-full border-2 transition-all ${color === c ? 'border-indigo-600 scale-110 shadow-lg' : 'border-white hover:scale-105'}`}
+                                            className={`w-9 h-9 rounded-full border-2 transition-all ${color === c ? 'border-red-600 scale-110 shadow-lg' : 'border-white hover:scale-105'}`}
                                             style={{ backgroundColor: c }}
                                         />
                                     ))}
@@ -365,7 +365,7 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
 
                             {/* Stroke Width / Font Size */}
                             <div>
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">
+                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3 block">
                                     {tool === 'text' ? 'Font Size' : 'Stroke Weight'}
                                 </label>
                                 <div className="flex items-center gap-3">
@@ -375,24 +375,24 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
                                         max={tool === 'highlighter' ? '100' : '50'}
                                         value={strokeWidth}
                                         onChange={(e) => handleStrokeChange(parseInt(e.target.value))}
-                                        className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                                        className="w-full h-1.5 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-red-600"
                                     />
-                                    <span className="text-[10px] font-bold text-slate-400 w-6">{strokeWidth}</span>
+                                    <span className="text-[10px] font-medium text-gray-500 w-6">{strokeWidth}</span>
                                 </div>
                             </div>
 
                             {/* Sticky/Text Options */}
                             {(tool === 'sticky' || tool === 'text' || (selectedElement?.type === 'sticky')) && (
-                                <div className="space-y-4 pt-2 border-t border-slate-50">
+                                <div className="space-y-4 pt-2 border-t border-gray-50">
                                     {(tool === 'sticky' || selectedElement?.type === 'sticky') && (
                                         <div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Sticky Shape</label>
+                                            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3 block">Sticky Shape</label>
                                             <div className="flex gap-2">
                                                 {['square', 'rectangle', 'circle'].map(shape => (
                                                     <button
                                                         key={shape}
                                                         onClick={() => setStickyShape(shape)}
-                                                        className={`flex-1 py-2 flex items-center justify-center rounded-xl transition-all border ${stickyShape === shape ? 'border-indigo-600 bg-indigo-50 text-indigo-600' : 'border-slate-200 hover:bg-slate-50 text-slate-400'}`}
+                                                        className={`flex-1 py-2 flex items-center justify-center rounded-xl transition-all border ${stickyShape === shape ? 'border-red-600 bg-red-accent/10 text-red-accent' : 'border-white/10 hover:bg-dark text-gray-500'}`}
                                                     >
                                                         {shape === 'square' && <Square size={16} />}
                                                         {shape === 'rectangle' && <div className="w-5 h-3.5 border-2 border-current rounded-sm" />}
@@ -403,11 +403,11 @@ const Toolbar = ({ socket, roomId: propRoomId, yDoc, isLocalUpdate, deleteElemen
                                         </div>
                                     )}
                                     <div>
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Font Family</label>
+                                        <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3 block">Font Family</label>
                                         <select
                                             value={stickyFont}
                                             onChange={(e) => handleStickyFontChange(e.target.value)}
-                                            className="w-full text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl p-2.5 outline-none hover:bg-white transition-all appearance-none cursor-pointer"
+                                            className="w-full text-xs font-medium bg-dark border border-white/10 rounded-xl p-2.5 outline-none hover:bg-dark-lighter transition-all appearance-none cursor-pointer"
                                         >
                                             <option value="sans-serif">Sans-serif</option>
                                             <option value="serif">Serif</option>

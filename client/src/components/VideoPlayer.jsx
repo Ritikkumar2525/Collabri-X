@@ -18,11 +18,11 @@ class VideoErrorBoundary extends React.Component {
     render() {
         if (this.state.hasError) {
             return (
-                <div className="w-full h-full bg-slate-800 flex items-center justify-center rounded-2.5xl overflow-hidden ring-1 ring-red-500/50 flex-col gap-2 p-4 text-center">
+                <div className="w-full h-full bg-dark-lightest flex items-center justify-center rounded-2.5xl overflow-hidden ring-1 ring-red-500/50 flex-col gap-2 p-4 text-center">
                     <div className="w-12 h-12 rounded-full bg-red-900/50 flex items-center justify-center text-red-400">
                         <CameraOff size={24} />
                     </div>
-                    <span className="text-[10px] font-bold text-red-400">Stream Error</span>
+                    <span className="text-[10px] font-medium text-red-400">Stream Error</span>
                 </div>
             );
         }
@@ -62,8 +62,8 @@ const VideoPlayerBase = ({ stream, isLocal = false, autoPlay = true, muted = fal
 
     if (!stream) {
         return (
-            <div className="w-full h-full bg-slate-800 flex items-center justify-center rounded-2.5xl overflow-hidden ring-1 ring-white/10" style={{ width, height }}>
-                <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
+            <div className="w-full h-full bg-dark-lightest flex items-center justify-center rounded-2.5xl overflow-hidden ring-1 ring-white/10" style={{ width, height }}>
+                <div className="w-12 h-12 rounded-full bg-dark-lighter flex items-center justify-center text-gray-500">
                     <CameraOff size={24} />
                 </div>
             </div>
@@ -71,10 +71,10 @@ const VideoPlayerBase = ({ stream, isLocal = false, autoPlay = true, muted = fal
     }
 
     return (
-        <div className="relative w-full h-full rounded-2.5xl overflow-hidden bg-slate-900 group" style={{ width, height }}>
+        <div className="relative w-full h-full rounded-2.5xl overflow-hidden bg-black group" style={{ width, height }}>
             {!isStreamReady && (
-                <div className="absolute inset-0 flex items-center justify-center bg-slate-800 z-10">
-                    <Loader2 size={24} className="text-slate-400 animate-spin" />
+                <div className="absolute inset-0 flex items-center justify-center bg-dark-lightest z-10">
+                    <Loader2 size={24} className="text-gray-500 animate-spin" />
                 </div>
             )}
             <video

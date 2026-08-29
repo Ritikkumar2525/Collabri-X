@@ -6,10 +6,10 @@ const ProtectedRoute = ({ children }) => {
 
     if (isLoading) {
         return (
-            <div className="h-screen w-screen flex items-center justify-center bg-slate-50">
+            <div className="h-screen w-screen flex items-center justify-center bg-dark">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-                    <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">Verifying session...</p>
+                    <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+                    <p className="text-gray-500 font-medium text-xs uppercase tracking-widest">Verifying session...</p>
                 </div>
             </div>
         );

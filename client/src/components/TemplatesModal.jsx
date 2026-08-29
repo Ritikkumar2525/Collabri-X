@@ -87,7 +87,7 @@ const TemplatesModal = ({ isOpen, onClose, socket, roomId, yDoc, isLocalUpdate }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-dark-lighter rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
                 <div className="flex justify-between items-center p-5 border-b border-gray-100">
                     <h2 className="text-xl font-semibold text-gray-800">Templates Library</h2>
                     <button onClick={onClose} className="p-2 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-full transition-colors">
@@ -114,10 +114,10 @@ const TemplatesModal = ({ isOpen, onClose, socket, roomId, yDoc, isLocalUpdate }
 
                     <button
                         onClick={() => handleInsert(swotTemplate)}
-                        className="flex flex-col items-center justify-center p-6 border-2 border-gray-100 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all group"
+                        className="flex flex-col items-center justify-center p-6 border-2 border-gray-100 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all group"
                     >
-                        <LayoutTemplate size={40} className="text-gray-400 group-hover:text-emerald-500 mb-3" />
-                        <span className="font-medium text-gray-700 group-hover:text-emerald-700">SWOT Analysis</span>
+                        <LayoutTemplate size={40} className="text-gray-400 group-hover:text-red-500 mb-3" />
+                        <span className="font-medium text-gray-700 group-hover:text-red-700">SWOT Analysis</span>
                     </button>
 
                     <button
