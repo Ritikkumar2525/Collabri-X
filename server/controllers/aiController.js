@@ -1,4 +1,4 @@
-import OpenAI from 'openai';
+import { GoogleGenAI } from '@google/genai';
 import NodeCache from 'node-cache';
 import asyncHandler from 'express-async-handler';
 import { v4 as uuidv4 } from 'uuid';
@@ -41,11 +41,21 @@ class AsyncQueue {
 
 const aiQueue = new AsyncQueue(1); // Lock strictly to 1 concurrent request for free-tier
 
-const getOpenAIClient = () => {
-    if (!process.env.OPENAI_API_KEY) {
-        throw new Error('OPENAI_API_KEY is missing from server .env file');
+const getGeminiClient = () => {
+    if (!process.env.GEMINI_API_KEY) {
+        throw new Error('GEMINI_API_KEY is missing from server .env file');
     }
-    return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+};
+
+// Helper: send a prompt to Gemini and return the text response
+const geminiGenerate = async (systemPrompt, userPrompt) => {
+    const ai = getGeminiClient();
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        contents: `${systemPrompt}\n\nUser Request:\n${userPrompt}`,
+    });
+    return response.text.trim();
 };
 
 // @desc    Summarize array of texts (e.g., sticky notes)
@@ -59,7 +69,6 @@ export const summarizeText = asyncHandler(async (req, res) => {
     }
 
     const combinedText = texts.join('\n---\n');
-    // Generate simple cache key
     const cacheKey = `summary_${Buffer.from(combinedText).toString('base64').substring(0, 50)}`;
 
     const cached = aiCache.get(cacheKey);
@@ -67,19 +76,10 @@ export const summarizeText = asyncHandler(async (req, res) => {
         return res.status(200).json({ summary: cached });
     }
 
-    const openai = getOpenAIClient();
+    const systemPrompt = 'You are a concise summarization assistant. Summarize the following notes into a single clear, actionable paragraph.';
 
     const task = async () => {
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                { role: 'system', content: 'You are a concise summarization assistant. Summarize the following notes into a single clear, actionable paragraph.' },
-                { role: 'user', content: combinedText }
-            ],
-            temperature: 0.5,
-            max_tokens: 250
-        });
-        return response.choices[0].message.content.trim();
+        return await geminiGenerate(systemPrompt, combinedText);
     };
 
     const summary = await aiQueue.add(task);
@@ -89,7 +89,7 @@ export const summarizeText = asyncHandler(async (req, res) => {
 });
 
 
-// @desc    Generate diagram elements explicitly structured for Konva 
+// @desc    Generate diagram elements explicitly structured for Konva
 // @route   POST /api/ai/generate-diagram
 // @access  Private
 export const generateDiagram = asyncHandler(async (req, res) => {
@@ -102,12 +102,9 @@ export const generateDiagram = asyncHandler(async (req, res) => {
     const cacheKey = `diagram_${prompt.toLowerCase().replace(/\s+/g, '_')}`;
     const cached = aiCache.get(cacheKey);
     if (cached) {
-        // Remap new UUIDs to cached items to avoid collisions on multiple requests
         const freshElements = JSON.parse(cached).map(el => ({ ...el, id: uuidv4() }));
         return res.status(200).json({ elements: freshElements });
     }
-
-    const openai = getOpenAIClient();
 
     const systemPrompt = `
 You are a diagram generator for a React-Konva object-oriented whiteboard.
@@ -122,29 +119,19 @@ Each object must follow this schema:
   "strokeWidth": 2,
   "isFinished": true
 }
-For 'rectangle', 'circle', 'triangle', 'star': Must include 'points' property as an array [startX, startY, endX, endY]. 
+For 'rectangle', 'circle', 'triangle', 'star': Must include 'points' property as an array [startX, startY, endX, endY].
 For 'line': 'points' as array [x1, y1, x2, y2].
 Layout nodes logically, branching out starting around (${startX}, ${startY}). Keep shapes sized ~ 100x100px.
     `;
 
     const task = async () => {
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: prompt }
-            ],
-            temperature: 0.2,
-            max_tokens: 1000
-        });
-
-        let content = response.choices[0].message.content.trim();
+        let content = await geminiGenerate(systemPrompt, prompt);
+        // Strip markdown code fences if present
         if (content.startsWith('\`\`\`json')) {
             content = content.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
         } else if (content.startsWith('\`\`\`')) {
             content = content.replace(/\`\`\`/g, '').trim();
         }
-
         return JSON.parse(content);
     };
 
@@ -152,16 +139,13 @@ Layout nodes logically, branching out starting around (${startX}, ${startY}). Ke
     try {
         elements = await aiQueue.add(task);
     } catch (err) {
-        // Fallback for LLM parsing errors
         console.error("LLM Parsing Failure", err);
         res.status(500);
         throw new Error("Failed to generate a valid diagram format from AI. Please try a simpler prompt.");
     }
 
-    // Cache the stringified version
     aiCache.set(cacheKey, JSON.stringify(elements));
 
-    // Enforce final structure requirements
     const mappedElements = elements.map(el => ({
         ...el,
         id: uuidv4(),
@@ -182,16 +166,12 @@ export const getDesignFeedback = asyncHandler(async (req, res) => {
         throw new Error('Please provide canvas elements to analyze');
     }
 
-    // Hash the first 20 object positions to avoid full huge payloads overcaching but keep basic cache
     const cacheKey = `feedback_${Buffer.from(JSON.stringify(elements.slice(0, 20))).toString('base64').substring(0, 30)}`;
     const cached = aiCache.get(cacheKey);
     if (cached) {
         return res.status(200).json({ feedback: cached });
     }
 
-    const openai = getOpenAIClient();
-
-    // Map object to basic string to keep LLM context window low
     const simplifiedElements = elements.map(el => {
         return `Type: ${el.type}, Pos: (${Math.round(el.x)}, ${Math.round(el.y)}), Color: ${el.color}`;
     });
@@ -205,16 +185,7 @@ Be very concise. Max 3 bullets.
     `;
 
     const task = async () => {
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Canvas Elements:\n${simplifiedElements.join('\n')}` }
-            ],
-            temperature: 0.6,
-            max_tokens: 200
-        });
-        return response.choices[0].message.content.trim();
+        return await geminiGenerate(systemPrompt, `Canvas Elements:\n${simplifiedElements.join('\n')}`);
     };
 
     const feedback = await aiQueue.add(task);
@@ -232,8 +203,6 @@ export const analyzeActivity = asyncHandler(async (req, res) => {
         return res.status(200).json({ summary: "No recent activity to report. Your workspace is waiting for the next big idea!" });
     }
 
-    const openai = getOpenAIClient();
-
     const activityContext = logs.map(log => `${log.user}: ${log.action} at ${new Date(log.timestamp).toLocaleTimeString()}`).join('\n');
 
     const systemPrompt = `
@@ -244,16 +213,7 @@ Be encouraging and professional.
     `;
 
     const task = async () => {
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Activity Logs:\n${activityContext}` }
-            ],
-            temperature: 0.7,
-            max_tokens: 200
-        });
-        return response.choices[0].message.content.trim();
+        return await geminiGenerate(systemPrompt, `Activity Logs:\n${activityContext}`);
     };
 
     const summary = await aiQueue.add(task);
@@ -270,10 +230,8 @@ export const generateBrainstorm = asyncHandler(async (req, res) => {
         throw new Error('Please provide a brainstorming prompt');
     }
 
-    const openai = getOpenAIClient();
-
     const systemPrompt = `
-You are a brainstorming assistant. 
+You are a brainstorming assistant.
 Generate 4-6 distinct, creative sticky notes based on the user's prompt.
 Output ONLY a strict JSON array of objects. Do NOT wrap in markdown tags.
 Each object must follow this schema:
@@ -292,23 +250,12 @@ Scatter the notes loosely around the starting coordinates (${startX}, ${startY})
     `;
 
     const task = async () => {
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: prompt }
-            ],
-            temperature: 0.8,
-            max_tokens: 1000
-        });
-
-        let content = response.choices[0].message.content.trim();
+        let content = await geminiGenerate(systemPrompt, prompt);
         if (content.startsWith('\`\`\`json')) {
             content = content.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
         } else if (content.startsWith('\`\`\`')) {
             content = content.replace(/\`\`\`/g, '').trim();
         }
-
         return JSON.parse(content);
     };
 
@@ -326,6 +273,7 @@ Scatter the notes loosely around the starting coordinates (${startX}, ${startY})
         throw new Error("Failed to generate brainstorm stickies. Please try a different prompt.");
     }
 });
+
 // @desc    General chat with AI Assistant
 // @route   POST /api/ai/chat
 // @access  Private
@@ -336,8 +284,6 @@ export const chatWithAI = asyncHandler(async (req, res) => {
         throw new Error('Please provide a message');
     }
 
-    const openai = getOpenAIClient();
-
     const systemPrompt = `
 You are an intelligent, professional, and helpful whiteboard assistant named "AI Pilot".
 You help users with project management, idea generation, and canvas organization.
@@ -346,16 +292,7 @@ Context: ${context}
     `;
 
     const task = async () => {
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: message }
-            ],
-            temperature: 0.7,
-            max_tokens: 500
-        });
-        return response.choices[0].message.content.trim();
+        return await geminiGenerate(systemPrompt, message);
     };
 
     const reply = await aiQueue.add(task);

@@ -599,7 +599,7 @@ const AICoPilotPanel = ({ activities = [] }) => {
                         <Zap size={14} />
                     </button>
                 </form>
-                <p className="text-[10px] text-gray-500 mt-3 text-center font-medium">Powering your productivity with GPT-3.5</p>
+                <p className="text-[10px] text-gray-500 mt-3 text-center font-medium">Powering your productivity with Gemini AI</p>
             </div>
         </div>
     );

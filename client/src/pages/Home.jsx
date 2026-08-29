@@ -822,7 +822,7 @@ const Home = () => {
                         <div>
                             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-600/20 text-red-200 text-sm font-medium mb-6 border border-red-400/30">
                                 <Sparkles className="w-4 h-4" />
-                                <span>Powered by GPT-3.5 Turbo</span>
+                                <span>Powered by Gemini AI</span>
                             </div>
                             <h2 className="text-4xl md:text-5xl font-medium mb-6">Your Always-On AI Co-Pilot</h2>
                             <p className="text-xl text-red-100 mb-8 leading-relaxed">
