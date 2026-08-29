@@ -1,3 +1,4 @@
+import Logo from "../components/Logo";
 import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValueEvent } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -215,12 +216,7 @@ const Home = () => {
                     }`}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                    <div className="flex items-center gap-2 group cursor-pointer">
-                        <div className="w-10 h-10 bg-red-accent rounded-xl flex items-center justify-center text-white shadow-lg group-hover:rotate-12 transition-transform">
-                            <Layers size={24} />
-                        </div>
-                        <span className="text-xl font-medium text-white tracking-tighter">Collabrix</span>
-                    </div>
+                    <Logo textClassName="text-xl font-medium text-white tracking-tight font-sans" />
                     <nav className="hidden md:flex items-center gap-8">
                         {['Features', 'How it Works', 'Templates', 'Pricing'].map(item => (
                             <a
@@ -1239,12 +1235,7 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                         <div className="md:col-span-2">
                             <div className="flex flex-col gap-6">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-10 h-10 bg-red-accent rounded-xl flex items-center justify-center text-white">
-                                        <Layers size={22} />
-                                    </div>
-                                    <span className="text-xl font-medium text-white">Collabrix</span>
-                                </div>
+                                <Logo textClassName="text-xl font-medium text-white font-sans" />
                                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs font-medium">
                                     The persistent digital workspace for modern teams. Collaborate, innovate, and execute.
                                 </p>

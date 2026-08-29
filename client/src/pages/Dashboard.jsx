@@ -1,3 +1,4 @@
+import Logo from "../components/Logo";
 import React, { useState, useEffect, useRef, Component } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
@@ -821,14 +822,7 @@ const Dashboard = () => {
                 className="bg-dark-lighter border-r border-white/5 flex flex-col z-50 relative shadow-sm"
             >
                 <div className="p-6 flex items-center justify-between">
-                    {!isSidebarCollapsed && (
-                        <div className="flex items-center gap-2 group cursor-pointer">
-                            <div className="w-10 h-10 bg-red-accent rounded-xl flex items-center justify-center text-white shadow-md">
-                                <Layers size={22} />
-                            </div>
-                            <span className="text-xl font-medium text-gray-200">Workspace</span>
-                        </div>
-                    )}
+                    {!isSidebarCollapsed && <Logo textClassName="text-xl font-medium text-gray-200" />}
                     <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2 hover:bg-dark rounded-lg text-gray-500">
                         {isSidebarCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                     </button>
