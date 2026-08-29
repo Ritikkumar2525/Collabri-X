@@ -68,7 +68,6 @@ const Register = () => {
                         <GoogleLogin
                             onSuccess={handleGoogleSuccess}
                             onError={handleGoogleError}
-                            useOneTap
                             theme="outline"
                             shape="pill"
                             width="100%"
