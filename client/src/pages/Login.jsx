@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useGoogleLogin } from '@react-oauth/google';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -10,24 +11,31 @@ const Login = () => {
     });
 
     const navigate = useNavigate();
+    const location = useLocation();
     const { login, googleLogin, isLoading, error, token, clearError } = useAuthStore();
 
-    const googleSignIn = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            try {
-                const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                    headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-                });
-                const userInfo = await res.json();
-                await googleLogin(null, userInfo);
-            } catch (err) {
-                useAuthStore.setState({ error: 'Google Login was unsuccessful. Try again.' });
+    // Handle Google OAuth redirect callback
+    useEffect(() => {
+        const hash = window.location.hash;
+        if (hash && hash.includes('access_token')) {
+            const params = new URLSearchParams(hash.substring(1));
+            const accessToken = params.get('access_token');
+            if (accessToken) {
+                window.history.replaceState(null, '', window.location.pathname);
+                (async () => {
+                    try {
+                        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                            headers: { Authorization: `Bearer ${accessToken}` },
+                        });
+                        const userInfo = await res.json();
+                        await googleLogin(null, userInfo);
+                    } catch (err) {
+                        useAuthStore.setState({ error: 'Google Login was unsuccessful. Try again.' });
+                    }
+                })();
             }
-        },
-        onError: () => {
-            useAuthStore.setState({ error: 'Google Login was unsuccessful. Try again.' });
-        },
-    });
+        }
+    }, [location]);
 
     useEffect(() => {
         if (token) {
@@ -35,6 +43,13 @@ const Login = () => {
         }
         return () => clearError();
     }, [token, navigate, clearError]);
+
+    const handleGoogleSignIn = () => {
+        const redirectUri = window.location.origin + '/login';
+        const scope = 'openid email profile';
+        const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}&prompt=select_account`;
+        window.location.href = googleAuthUrl;
+    };
 
     const handleChange = (e) => {
         setFormData((prev) => ({
@@ -75,7 +90,7 @@ const Login = () => {
                     <div className="flex justify-center w-full mb-4">
                         <button
                             type="button"
-                            onClick={() => googleSignIn()}
+                            onClick={handleGoogleSignIn}
                             className="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-xl border border-white/10 bg-dark/50 hover:bg-dark hover:border-white/20 transition-all text-sm font-medium text-white"
                         >
                             <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -98,7 +113,7 @@ const Login = () => {
                     </div>
 
                     <div className="space-y-5">
-                        <div className="space-y-1.5 focus-within:trangray-x-1 transition-transform">
+                        <div className="space-y-1.5">
                             <label htmlFor="email" className="block text-xs font-medium text-gray-500 uppercase tracking-widest pl-1">
                                 Email
                             </label>
@@ -113,7 +128,7 @@ const Login = () => {
                                 onChange={handleChange}
                             />
                         </div>
-                        <div className="space-y-1.5 focus-within:trangray-x-1 transition-transform">
+                        <div className="space-y-1.5">
                             <label htmlFor="password" className="block text-xs font-medium text-gray-500 uppercase tracking-widest pl-1">
                                 Password
                             </label>
