@@ -37,10 +37,17 @@ const useAuthStore = create((set) => ({
         }
     },
 
-    googleLogin: async (credential) => {
+    googleLogin: async (credential, userInfo = null) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await api.post('/auth/google', { credential });
+            let response;
+            if (credential) {
+                // Legacy flow: send ID token
+                response = await api.post('/auth/google', { credential });
+            } else if (userInfo) {
+                // New flow: send user info from access token
+                response = await api.post('/auth/google', { userInfo });
+            }
             const { token, ...user } = response.data;
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));

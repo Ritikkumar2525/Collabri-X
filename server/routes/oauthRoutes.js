@@ -18,33 +18,47 @@ const generateToken = (id) => {
 // @access  Public
 router.post('/google', async (req, res) => {
     try {
-        const { credential } = req.body;
+        const { credential, userInfo } = req.body;
 
-        if (!credential) {
-            return res.status(400).json({ message: 'Google credential is required' });
+        let email, name, picture, googleId;
+
+        if (credential) {
+            // Legacy flow: verify Google ID token
+            const ticket = await client.verifyIdToken({
+                idToken: credential,
+                audience: process.env.GOOGLE_CLIENT_ID,
+            });
+
+            const payload = ticket.getPayload();
+
+            if (!payload) {
+                return res.status(400).json({ message: 'Invalid Google token payload' });
+            }
+
+            email = payload.email;
+            name = payload.name;
+            picture = payload.picture;
+            googleId = payload.sub;
+        } else if (userInfo) {
+            // New flow: user info from access token (already verified by Google)
+            email = userInfo.email;
+            name = userInfo.name;
+            picture = userInfo.picture;
+            googleId = userInfo.sub;
+        } else {
+            return res.status(400).json({ message: 'Google credential or userInfo is required' });
         }
 
-        // Verify the Google JWT token
-        const ticket = await client.verifyIdToken({
-            idToken: credential,
-            audience: process.env.GOOGLE_CLIENT_ID,
-        });
-
-        const payload = ticket.getPayload();
-
-        if (!payload) {
-            return res.status(400).json({ message: 'Invalid Google token payload' });
+        if (!email) {
+            return res.status(400).json({ message: 'Could not retrieve email from Google' });
         }
-
-        const { email, name, picture, sub: googleId } = payload;
 
         // Check if user already exists
         let user = await User.findOne({ email });
 
         if (!user) {
             // Create a new user with a random, strong password to satisfy existing schema requirements
-            // We use `googleId` as part of the entropy
-            const randomPassword = `OAuth2!${Math.random().toString(36).slice(-8)}${googleId}`;
+            const randomPassword = `OAuth2!${Math.random().toString(36).slice(-8)}${googleId || 'google'}`;
 
             user = await User.create({
                 name: name || 'Google User',
