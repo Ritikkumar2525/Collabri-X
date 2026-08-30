@@ -74,19 +74,19 @@ const useCanvasStore = create((set) => ({
         return { elements: newElements };
     }),
 
-    undo: () => set((state) => {
+    undo: () => {
+        const state = useCanvasStore.getState();
         if (state.undoManager) {
             state.undoManager.undo();
         }
-        return state;
-    }),
+    },
 
-    redo: () => set((state) => {
+    redo: () => {
+        const state = useCanvasStore.getState();
         if (state.undoManager) {
             state.undoManager.redo();
         }
-        return state;
-    }),
+    },
 
     clearCanvas: () => set(() => ({
         elements: []
