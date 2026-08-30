@@ -52,7 +52,7 @@ const getGeminiClient = () => {
 const geminiGenerate = async (systemPrompt, userPrompt) => {
     const ai = getGeminiClient();
     const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-3.6-flash',
         contents: `${systemPrompt}\n\nUser Request:\n${userPrompt}`,
     });
     return response.text.trim();

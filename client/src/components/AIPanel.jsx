@@ -251,35 +251,42 @@ const AIPanel = ({ roomId: propRoomId, yDoc, isLocalUpdate, showOnboarding, isOp
                             </section>
 
                             {/* Output Area */}
-                            {(feedback || summary || actionItems) && (
+                            {(feedback || summary || actionItems || error) && (
                                 <section className="animate-in fade-in slide-in-from-bottom-4">
                                     <div className="flex items-center justify-between mb-4">
                                         <h4 className="text-xs font-bold text-gray-200 uppercase tracking-tight">Results</h4>
                                         <button
-                                            onClick={() => { setFeedback(''); setSummary(''); setActionItems(''); }}
+                                            onClick={() => { setFeedback(''); setSummary(''); setActionItems(''); setError(null); }}
                                             className="text-[10px] font-bold text-red-accent hover:text-red-700 uppercase tracking-widest"
                                         >
                                             Clear
                                         </button>
                                     </div>
-                                    <div className="bg-black rounded-3xl p-6 text-white shadow-2xl relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 blur-3xl -mr-16 -mt-16" />
-                                        <div className="relative z-10">
-                                            <p className="text-red-400 text-[10px] font-bold uppercase tracking-widest mb-3">
-                                                {feedback ? 'UX Feedback' : summary ? 'Board Summary' : 'Action Items'}
-                                            </p>
-                                            <div className="text-xs leading-relaxed font-medium opacity-90 whitespace-pre-wrap">
-                                                {feedback || summary || actionItems}
+                                    
+                                    {error ? (
+                                        <div className="bg-red-950/50 border border-red-500/20 rounded-2xl p-4 text-red-400 text-xs font-medium leading-relaxed">
+                                            {error}
+                                        </div>
+                                    ) : (
+                                        <div className="bg-black rounded-3xl p-6 text-white shadow-2xl relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 blur-3xl -mr-16 -mt-16" />
+                                            <div className="relative z-10">
+                                                <p className="text-red-400 text-[10px] font-bold uppercase tracking-widest mb-3">
+                                                    {feedback ? 'UX Feedback' : summary ? 'Board Summary' : 'Action Items'}
+                                                </p>
+                                                <div className="text-xs leading-relaxed font-medium opacity-90 whitespace-pre-wrap">
+                                                    {feedback || summary || actionItems}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </section>
                             )}
                         </div>
 
                         {/* Footer Info */}
                         <div className="p-6 bg-dark border-t border-white/5 flex items-center justify-between">
-                            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Model: GPT-4o Mini</span>
+                            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Model: Gemini 2.0 Flash</span>
                             <div className="flex gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
                                 <span className="text-[9px] font-bold text-red-600 uppercase tracking-widest">Ready</span>
